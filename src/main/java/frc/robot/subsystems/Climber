@@ -1,0 +1,34 @@
+package frc.robot.subsystems;
+
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class Climber extends SubsystemBase {
+
+    TalonFX motor_one, motor_two;
+
+    public Climber() {
+        motor_one = new TalonFx(27, /*idk what type our motors are*/);
+        motor_two = new TalonFX(28, /*idk what type our motors are*/ );
+    }
+
+    public void grabUp(double volts) {
+        motor_one.set(volts);
+        motor_two.set(volts);
+    }
+
+    public void afk(){
+        motor_one.set(0.5);
+        motor_two.set(0.5)
+    }
+
+    public void grabDown(double volts) {
+        motor_one.set(-volts);
+        motor_two.set(-volts);
+    }
+    
+}

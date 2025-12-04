@@ -1,32 +1,26 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
+import com.revrobotics.spark.SparkMax;
+import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
 
-    SparkMax motor_top, motor_bottom;
+    SparkMax first_motor, second_motor;
+    TalonFX wrist;
 
-    TalonFX motor_wrist;
 
     public Intake() {
-        motor_top = new SparkMax(27, MotorType.kBrushless);
-        motor_bottom = new SparkMax(28, MotorType.kBrushless);
-        motor_wrist = new TalonFX(13);
+        first_motor = new SparkMax(1000, MotorType.kBrushless);
+        second_motor = new SparkMax(1000, MotorType.kBrushless);
     }
 
-    public void runMotors(double speed) {
-        motor_top.set(speed);
-        motor_bottom.set(-speed);
-    }
-
-    public void runWrist(double volts) {
-        motor_wrist.setControl(new VoltageOut(volts));
-
+    public void runMotors(double speed, double secSpeed) {
+        SmartDashboard.putNumber("shooter_speed", speed);
+        first_motor.set(speed);
+        second_motor.set(-speed);
     }
     
 }
