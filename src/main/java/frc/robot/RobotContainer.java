@@ -4,11 +4,14 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Funnel;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,9 +21,16 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Intake m_intake = new Intake();
+
+  private final Shooter m_shooter = new Shooter();
+
+  private final Funnel m_funnel = new Funnel();
 
   private final Joystick main_stick = new Joystick(4);
+
+  //private final Climber m_climber = new Climber();
+
+  private final Elevator m_Elevator = new Elevator();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -31,39 +41,61 @@ public class RobotContainer {
   private void configureBindings() {
 
 
-    new JoystickButton(main_stick, 1)
+    new JoystickButton(main_stick, 7)
         .whileTrue(new StartEndCommand(
-            () -> m_intake.runMotors(0.4), 
-            () -> m_intake.runMotors(0)));
+            () -> m_shooter.runMotors(.2), 
+            () -> m_shooter.runMotors(0)));
 
-    new JoystickButton(main_stick, 2)
-        .whileTrue(new StartEndCommand(
-            () -> m_intake.runMotors(-0.4), 
-            () -> m_intake.runMotors(0)));
+    new JoystickButton(main_stick, 8)
+        .onTrue(new InstantCommand(m_funnel::flip));
 
-    new JoystickButton(main_stick, 3)
-        .whileTrue(new StartEndCommand(
-            () -> m_intake.runMotors(0.9), 
-            () -> m_intake.runMotors(0)));
+    /*new JoystickButton(main_stick, 9)
+        .onTrue(new IntantCommand(m_climber::grabDown(2)));
 
-    new JoystickButton(main_stick, 4)
-        .whileTrue(new StartEndCommand(
-            () -> m_intake.runMotors(-0.9), 
-            () -> m_intake.runMotors(0)));
+    new JoystickButton(main_stick, 9)
+      .whileTrue(new StartEndCommand(
+          () -> m_climber.grabUp(2), 
+          () -> m_climber.afk()));
 
-    new JoystickButton(main_stick, 5)
-        .whileTrue(new StartEndCommand(
-            () -> m_intake.runWrist(1), 
-            () -> m_intake.runWrist(0)));
+    new JoystickButton(main_stick, 10){
+      .whileTrue(new StartEndCommand(
+          () -> m_climber.runMotors(2), 
+          () -> m_climber.afk()));
 
-    new JoystickButton(main_stick, 6)
-        .whileTrue(new StartEndCommand(
-            () -> m_intake.runWrist(-1), 
-            () -> m_intake.runWrist(0)));
+    //button 3
+    new JoystickButton(main_stick,12)
+      .onTrue(new StartEndCommand(, 
+          () -> m_climber.afk()));
 
+    //upButton
+    new JoystickButton(main_stick,11)
+      .whileTrue(new StartEndCommand(
+          () -> m_climber.grabUp(2), 
+          () -> m_climber.afk()));
+
+    //downbutton
+    new JoystickButton(main_stick,11)
+      .whileTrue(new StartEndCommand(
+          () -> m_climber.grabDown(2), 
+          () -> m_climber.afk()));
+
+    
+*/
+
+//i've got this *ding*
+
+          //l4 preset
+    new JoystickButton(main_stick, 9)
+      .whileTrue(new StartEndCommand(
+        () -> m_Elevator.l4(),
+        () -> m_Elevator.afk()));
+    
+      
+    }
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
   }
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
