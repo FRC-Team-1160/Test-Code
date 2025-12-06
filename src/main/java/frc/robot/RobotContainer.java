@@ -1,49 +1,57 @@
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.Joystick;
-
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.subsystems.Elevator;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.Constants.IOConstants;
 import frc.robot.Constants;
-
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 
 public class RobotContainer {
 
-
     private final Joystick m_joystick = new Joystick(IOConstants.MAIN_PORT);
 
+    private final Elevator m_elevator =
+        new Elevator(Constants.PortConstants.ELEVATOR_MOTOR);
 
-    private final Elevator m_elevator = new Elevator(Constants.PortConstants.ELEVATOR_MOTOR);
-    private final ElevatorCommands m_elevatorCommands = new ElevatorCommands(m_elevator);
+    private final ElevatorCommands m_elevatorCommands =
+        new ElevatorCommands(m_elevator);
 
+    public RobotContainer() {
+        configureBindings();
 
-    public RobotContainer() {}
+        // Default command → manual control
+        m_elevator.setDefaultCommand(
+            new RunCommand(() -> {
+                double y = m_joystick.getRawAxis(1);
 
+                if (Math.abs(y) > 0.05)
+                    m_elevatorCommands.manual(y * 0.4);
+                else
+                    m_elevatorCommands.stop();
 
-    public void teleopPeriodic() {
-        if (m_joystick.getRawButtonPressed(1)) m_elevatorCommands.moveL1();
-        if (m_joystick.getRawButtonPressed(2)) m_elevatorCommands.moveL2();
-        if (m_joystick.getRawButtonPressed(3)) m_elevatorCommands.moveL3();
-        if (m_joystick.getRawButtonPressed(4)) m_elevatorCommands.moveL4();
-        if (m_joystick.getRawButtonPressed(5)) m_elevatorCommands.moveSource();
-        if (m_joystick.getRawButtonPressed(6)) m_elevatorCommands.moveStow();
+                SmartDashboard.putNumber("current position:", m_elevator.getPosition());
+            }, m_elevator)
+        );
+    }
 
+    /** --------------------------------------------
+     *  Configure joystick → command bindings
+     *  -------------------------------------------- */
+    private void configureBindings() {
+       // new JoystickButton(m_joystick, 1).onTrue(m_elevatorCommands.goToL1);
+        new JoystickButton(m_joystick, 2).onTrue(
+            m_elevator.setStateCmd(TargetState.L2));
+        // new JoystickButton(m_joystick, 3).onTrue(m_elevatorCommands.moveL3);
+        // new JoystickButton(m_joystick, 4).onTrue(m_elevatorCommands.moveL4);
+        // new JoystickButton(m_joystick, 5).onTrue(m_elevatorCommands.moveSource);
 
-        double y = -m_joystick.getRawAxis(1);
-        if (Math.abs(y) > 0.05) {
-            m_elevatorCommands.manual(y * 0.4);
-        } else {
-            m_elevatorCommands.stop();
-        }
-
-
-        if (m_joystick.getRawButtonPressed(7)) {
-            m_elevator.zeroEncoder();
-        }
+        // Zero encoder button
+        new JoystickButton(m_joystick, 7)
+            .onTrue(new RunCommand(() -> m_elevator.zeroEncoder(), m_elevator));
     }
 }
-
-

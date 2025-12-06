@@ -8,21 +8,24 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 import frc.robot.Constants.ElevatorConstants;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
-public class Elevator {
+public class Elevator extends SubsystemBase{
 
 
     private final TalonFX m_motor;
+    public final double elevator_setpoint;
     private final MotionMagicVoltage m_mmRequest = new MotionMagicVoltage(0);
 
 
     public Elevator(int motorID) {
-        m_motor = new TalonFX(motorID);
-
+        m_motor = new TalonFX(motorID, "CANivore");
+        elevator_setpoint = getPosition();
 
         TalonFXConfiguration config = new TalonFXConfiguration()
             .withMotorOutput(new MotorOutputConfigs()
@@ -62,20 +65,17 @@ public class Elevator {
 
 
     public void setTargetRotations(double rotations) {
-        if (rotations > ElevatorConstants.MAX_EXTENSION)
+        if (rotations > ElevatorConstants.MAX_EXTENSION-0.1)
             rotations = ElevatorConstants.MAX_EXTENSION;
-        if (rotations < ElevatorConstants.MIN_EXTENSION)
+        if (rotations < ElevatorConstants.MIN_EXTENSION+0.1)
             rotations = ElevatorConstants.MIN_EXTENSION;
-
 
         m_motor.setControl(m_mmRequest.withPosition(rotations));
     }
 
-
     public void runManual(double percent) {
         m_motor.set(percent);
     }
-
 
     public void stop() {
         m_motor.set(0);
@@ -86,6 +86,10 @@ public class Elevator {
         m_motor.setPosition(0);
     }
 
+    // ik dumb way of doing it without a seperate targetstate but its ok for now
+    // public double L2setpointError(){
+    
+    // }
 
     public void goToL1() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL1); }
     public void goToL2() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL2); }
