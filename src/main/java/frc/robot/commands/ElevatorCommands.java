@@ -23,10 +23,10 @@ public class ElevatorCommands {
     public Command L2Command(){
         Runnable empty = () -> {};
         return new FunctionalCommand(
-            empty, 
+            empty,
             m_elevator::goToL2,
             interrupted -> m_elevator.setNeutral(),
-            m_elevator::atSetpt,
+            m_elevator::atL2Setpt,
             m_elevator
         );
     }
@@ -53,6 +53,6 @@ public class ElevatorCommands {
     }
 
     public void stop() {
-        m_elevator.stop();
+        m_elevator.setNeutral();
     }
 }

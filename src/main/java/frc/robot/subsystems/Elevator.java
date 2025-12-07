@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix6.controls.NeutralOut;
 
 
 import frc.robot.Constants.ElevatorConstants;
@@ -78,7 +79,7 @@ public class Elevator extends SubsystemBase{
     }
 
     public void setNeutral(){
-        m_motor.set(0.35);
+        m_motor.setControl(new NeutralOut());
     }
 
     public void stop() {
@@ -99,9 +100,9 @@ public class Elevator extends SubsystemBase{
     // public void goToL2Algae() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL2Algae); }
     // public void goToL3Algae() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL3Algae); }
 
-    public boolean atSetpt(){   
-        double error = Math.abs(elevator_setpoint - getPosition());
-        if(error < 0.03){
+    public boolean atL2Setpt(){   
+        double error = Math.abs(ElevatorConstants.ElevatorSetpoints.kL2 - getPosition());
+        if(error < 0.05){
             return true;
         }else{
             return false;
