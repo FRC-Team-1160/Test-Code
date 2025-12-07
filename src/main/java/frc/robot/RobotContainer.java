@@ -8,6 +8,7 @@ import frc.robot.commands.ElevatorCommands;
 import frc.robot.Constants.IOConstants;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
@@ -39,13 +40,11 @@ public class RobotContainer {
         );
     }
 
-    /** --------------------------------------------
-     *  Configure joystick → command bindings
-     *  -------------------------------------------- */
     private void configureBindings() {
        // new JoystickButton(m_joystick, 1).onTrue(m_elevatorCommands.goToL1);
         new JoystickButton(m_joystick, 2).onTrue(
-            m_elevator.setStateCmd(TargetState.L2));
+            m_elevatorCommands.L2Command()
+            );
         // new JoystickButton(m_joystick, 3).onTrue(m_elevatorCommands.moveL3);
         // new JoystickButton(m_joystick, 4).onTrue(m_elevatorCommands.moveL4);
         // new JoystickButton(m_joystick, 5).onTrue(m_elevatorCommands.moveSource);

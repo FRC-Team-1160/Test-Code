@@ -77,6 +77,10 @@ public class Elevator extends SubsystemBase{
         m_motor.set(percent);
     }
 
+    public void setNeutral(){
+        m_motor.set(0.35);
+    }
+
     public void stop() {
         m_motor.set(0);
     }
@@ -86,19 +90,27 @@ public class Elevator extends SubsystemBase{
         m_motor.setPosition(0);
     }
 
-    // ik dumb way of doing it without a seperate targetstate but its ok for now
-    // public double L2setpointError(){
-    
-    // }
-
-    public void goToL1() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL1); }
+    // public void goToL1() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL1); }
     public void goToL2() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL2); }
-    public void goToL3() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL3); }
-    public void goToL4() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL4); }
-    public void goToSource() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kSource); }
-    public void goToStow() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kStow); }
-    public void goToL2Algae() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL2Algae); }
-    public void goToL3Algae() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL3Algae); }
+    // public void goToL3() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL3); }
+    // public void goToL4() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL4); }
+    // public void goToSource() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kSource); }
+    // public void goToStow() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kStow); }
+    // public void goToL2Algae() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL2Algae); }
+    // public void goToL3Algae() { setTargetRotations(ElevatorConstants.ElevatorSetpoints.kL3Algae); }
+
+    public boolean atSetpt(){   
+        double error = Math.abs(elevator_setpoint - getPosition());
+        if(error < 0.03){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void periodic(){
+        
+    }
 }
 
 
